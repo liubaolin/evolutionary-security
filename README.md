@@ -1,6 +1,6 @@
-# evolutionary
+# evolutionary-security
 
-evolutionary 进化的，演化的，循序渐进的
+evolutionary-security原本是evolutionary项目中的一个模块,主要是封装了SpringSecurity及SpringSocial,
+由于非常的独立,所以将其拿出来单独做一个项目.
 
-对一些技术的实践和封装，这个过程是不断演进的。
-
+该项目可以非常容易的使用SpringSecurity和SpringSocial,直接接入该模块可以非常方便的做用户权限体系,以及对接第三方登录等功能.

@@ -1,1 +1,0 @@
-spring通过java annotation方式的简单配置
