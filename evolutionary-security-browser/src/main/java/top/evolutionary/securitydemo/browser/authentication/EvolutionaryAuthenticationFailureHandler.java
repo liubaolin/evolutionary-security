@@ -1,8 +1,6 @@
 package top.evolutionary.securitydemo.browser.authentication;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.AuthenticationException;
@@ -20,7 +18,7 @@ import java.io.IOException;
 @Component
 public class EvolutionaryAuthenticationFailureHandler extends SimpleUrlAuthenticationFailureHandler {
 
-    private Logger logger = LoggerFactory.getLogger(getClass());
+
     @Autowired
     private ObjectMapper objectMapper;
 
