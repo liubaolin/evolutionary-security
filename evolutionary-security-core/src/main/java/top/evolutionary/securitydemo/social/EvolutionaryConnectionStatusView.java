@@ -37,14 +37,14 @@ public class EvolutionaryConnectionStatusView extends AbstractView {
      */
     @Override
     protected void renderMergedOutputModel(Map<String, Object> map, HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse) throws Exception {
+
+        Map<String, List<Connection<?>>> connectionsMap = (Map<String, List<Connection<?>>>) map.get("connectionMap");
+
         Map<String, Boolean> result = Maps.newHashMap();
-        map.forEach((key, obj) ->
-                {
-                    List<Connection<?>> connections = (List<Connection<?>>) obj;
-                    result.put(key, CollectionUtils.isNotEmpty(connections));
-                }
+        connectionsMap.forEach((key, connections) ->
+                result.put(key, CollectionUtils.isNotEmpty(connections))
         );
-        httpServletResponse.setContentType("applicaton/json;charset=UTF-8");
+        httpServletResponse.setContentType("application/json;charset=UTF-8");
         httpServletResponse.getWriter().write(objectMapper.writeValueAsString(result));
     }
 
