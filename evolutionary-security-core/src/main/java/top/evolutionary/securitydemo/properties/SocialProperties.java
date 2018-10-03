@@ -9,6 +9,8 @@ public class SocialProperties {
 
     private QQProperties qq = new QQProperties();
 
+    private WeChatProperties wechat = new WeChatProperties();
+
     public QQProperties getQq() {
         return qq;
     }
@@ -19,6 +21,14 @@ public class SocialProperties {
 
     public String getFilterProcessorUrl() {
         return filterProcessorUrl;
+    }
+
+    public WeChatProperties getWechat() {
+        return wechat;
+    }
+
+    public void setWechat(WeChatProperties wechat) {
+        this.wechat = wechat;
     }
 
     public void setFilterProcessorUrl(String filterProcessorUrl) {
