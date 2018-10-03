@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.context.request.ServletWebRequest;
 import top.evolutionary.securitydemo.browser.support.SimpleResult;
 import top.evolutionary.securitydemo.browser.support.SocialUserInfo;
+import top.evolutionary.securitydemo.common.SecurityConstants;
 import top.evolutionary.securitydemo.properties.SecurityProperties;
 
 import javax.servlet.http.HttpServletRequest;
@@ -51,7 +52,7 @@ public class BrowerSecurityController {
      * @return
      * @throws IOException
      */
-    @RequestMapping("/authentication/require")
+    @RequestMapping(SecurityConstants.DEFAULT_UNAUTHENTICATION_URL)
     @ResponseStatus(code = HttpStatus.UNAUTHORIZED)
     public SimpleResult requireAuthentication(HttpServletRequest request, HttpServletResponse response) throws IOException {
         SavedRequest savedRequest = requestCache.getRequest(request, response);
@@ -66,7 +67,13 @@ public class BrowerSecurityController {
     }
 
 
-    @GetMapping("/social/user")
+    /**
+     * 用户第一次社交登录时，会引导用户进行用户注册或绑定，此服务用于在注册或绑定页面获取社交网站用户信息
+     *
+     * @param request
+     * @return
+     */
+    @GetMapping(SecurityConstants.DEFAULT_SOCIAL_USER_INFO_URL)
     public SocialUserInfo getSocialUserInfo(HttpServletRequest request) {
         SocialUserInfo socialUserInfo = new SocialUserInfo();
         Connection connection = providerSignInUtils.getConnectionFromSession(new ServletWebRequest(request));
@@ -77,5 +84,10 @@ public class BrowerSecurityController {
         return socialUserInfo;
     }
 
-
+    @GetMapping("/session/invalid")
+    @ResponseStatus(code = HttpStatus.UNAUTHORIZED)
+    public SimpleResult sessionInvalid() {
+        String message = "session失效";
+        return new SimpleResult(message);
+    }
 }

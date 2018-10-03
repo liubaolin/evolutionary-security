@@ -9,9 +9,12 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.rememberme.JdbcTokenRepositoryImpl;
 import org.springframework.security.web.authentication.rememberme.PersistentTokenRepository;
+import org.springframework.security.web.session.InvalidSessionStrategy;
+import org.springframework.security.web.session.SessionInformationExpiredStrategy;
 import org.springframework.social.security.SpringSocialConfigurer;
 import top.evolutionary.securitydemo.authentication.AbstractChannelSecurityConfig;
 import top.evolutionary.securitydemo.authentication.mobile.SmsCodeAuthenticationSecurityconfig;
+import top.evolutionary.securitydemo.browser.session.EvolutionaryExpiredSessionStrategy;
 import top.evolutionary.securitydemo.common.SecurityConstants;
 import top.evolutionary.securitydemo.properties.SecurityProperties;
 import top.evolutionary.securitydemo.validate.code.config.ValidateCodeSecurityConfig;
@@ -44,6 +47,12 @@ public class BrowserSecurityConfig extends AbstractChannelSecurityConfig {
     @Autowired
     private SpringSocialConfigurer evolutionarySocialConfigurer;
 
+    @Autowired
+    private InvalidSessionStrategy invalidSessionStrategy;
+
+    @Autowired
+    private SessionInformationExpiredStrategy sessionInformationExpiredStrategy;
+
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
@@ -65,28 +74,39 @@ public class BrowserSecurityConfig extends AbstractChannelSecurityConfig {
         applyPasswordAuthenticationConfig(http);
 
         http.apply(validateCodeSecurityConfig)
-                .and()
-                .apply(smsCodeAuthenticationSecurityconfig)
-                .and()
-                .apply(evolutionarySocialConfigurer)
-                .and()
-                .rememberMe()
-                .tokenRepository(persistentTokenRepository())
-                .tokenValiditySeconds(securityProperties.getBrower().getRememberSeconds())
-                .userDetailsService(userDetailsService)
-                .and()
-                .authorizeRequests()
-                .antMatchers(SecurityConstants.DEFAULT_UNAUTHENTICATION_URL,
-                        SecurityConstants.DEFAULT_LOGIN_PROCESSING_URL_FORM,
-                        SecurityConstants.DEFAULT_LOGIN_PROCESSING_URL_MOBILE,
-                        securityProperties.getBrower().getLoginPage(),
-                        SecurityConstants.DEFAULT_VALIDATE_CODE_URL_PREFIX + "/*",
-                        securityProperties.getBrower().getSignUpUrl(),
-                        "/user/regist") //这个路径实际是业务方提供了,核心框架不应写死
-                .permitAll()
-                .anyRequest()
-                .authenticated()
-                .and()
+                        .and()
+                    .apply(smsCodeAuthenticationSecurityconfig)
+                        .and()
+                    .apply(evolutionarySocialConfigurer)
+                        .and()
+                    .rememberMe()
+                        .tokenRepository(persistentTokenRepository())
+                        .tokenValiditySeconds(securityProperties.getBrower().getRememberSeconds())
+                        .userDetailsService(userDetailsService)
+                        .and()
+                    .sessionManagement()
+                        .invalidSessionStrategy(invalidSessionStrategy)
+//                        .invalidSessionUrl("/session/invalid")
+                        .maximumSessions(securityProperties.getBrower().getSession().getMaximumSessions())//最大登录数
+                        .maxSessionsPreventsLogin(securityProperties.getBrower().getSession().isMaxSessionsPreventsLogin())//当Session的数量达到最大数量后,阻止后续的登录行为
+                        .expiredSessionStrategy(sessionInformationExpiredStrategy)
+                        .and()
+                        .and()
+                    .authorizeRequests()
+                    .antMatchers(SecurityConstants.DEFAULT_UNAUTHENTICATION_URL,
+                            SecurityConstants.DEFAULT_SIGN_IN_PROCESSING_URL_FORM,
+                            SecurityConstants.DEFAULT_SIGN_IN_PROCESSING_URL_MOBILE,
+                            securityProperties.getBrower().getLoginPage(),
+                            SecurityConstants.DEFAULT_VALIDATE_CODE_URL_PREFIX + "/*",
+                            securityProperties.getBrower().getSignUpUrl(),
+                            securityProperties.getBrower().getSession().getSessionInvalidUrl()+".json",
+                            securityProperties.getBrower().getSession().getSessionInvalidUrl()+".html",
+                            securityProperties.getBrower().getSession().getSessionInvalidUrl(),
+                            "/user/regist")
+                        .permitAll()
+                    .anyRequest()
+                    .authenticated()
+                    .and()
                 .csrf().disable();
     }
 }

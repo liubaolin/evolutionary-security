@@ -25,7 +25,7 @@ public class AbstractChannelSecurityConfig extends WebSecurityConfigurerAdapter 
 	protected void applyPasswordAuthenticationConfig(HttpSecurity http) throws Exception {
 		http.formLogin() //表单登录
 			.loginPage(SecurityConstants.DEFAULT_UNAUTHENTICATION_URL) //如果需要身份认证则跳转到这里
-			.loginProcessingUrl(SecurityConstants.DEFAULT_LOGIN_PROCESSING_URL_FORM)//登录请求的url
+			.loginProcessingUrl(SecurityConstants.DEFAULT_SIGN_IN_PROCESSING_URL_FORM)//登录请求的url
 			.successHandler(imoocAuthenticationSuccessHandler)
 			.failureHandler(imoocAuthenticationFailureHandler);
 	}
