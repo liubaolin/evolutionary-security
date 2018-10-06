@@ -1,12 +1,13 @@
 package top.evolutionary.securitydemo.common;
 
+import java.io.Serializable;
 import java.time.LocalDateTime;
 
 /**
  * @author richey
  * 验证码
  */
-public class ValidCode {
+public class ValidCode implements Serializable{
 
 
     private String code;

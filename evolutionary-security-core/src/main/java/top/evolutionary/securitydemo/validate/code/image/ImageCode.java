@@ -14,7 +14,6 @@ public class ImageCode extends ValidCode {
     private BufferedImage image;
 
 
-
     public ImageCode() {
     }
 
