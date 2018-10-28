@@ -14,7 +14,7 @@ import org.springframework.security.web.session.SessionInformationExpiredStrateg
 import top.evolutionary.securitydemo.browser.logout.EvolutionaryLogoutSuccessHandler;
 import top.evolutionary.securitydemo.browser.session.EvolutionaryExpiredSessionStrategy;
 import top.evolutionary.securitydemo.browser.session.EvolutionaryInvalidSessionStrategy;
-import top.evolutionary.securitydemo.properties.SecurityProperties;
+import top.evolutionary.securitydemo.properties.SecurityConfigProperties;
 
 /**
  * 浏览器环境下扩展点配置，配置在这里的bean，业务系统都可以通过声明同类型或同名的bean来覆盖安全
@@ -27,7 +27,7 @@ import top.evolutionary.securitydemo.properties.SecurityProperties;
 public class BrowserSecurityBeanConfig {
 
 	@Autowired
-	private SecurityProperties securityProperties;
+	private SecurityConfigProperties securityConfigProperties;
 	
 	/**
 	 * session失效时的处理策略配置
@@ -36,7 +36,7 @@ public class BrowserSecurityBeanConfig {
 	@Bean
 	@ConditionalOnMissingBean(InvalidSessionStrategy.class)
 	public InvalidSessionStrategy invalidSessionStrategy(){
-		return new EvolutionaryInvalidSessionStrategy(securityProperties);
+		return new EvolutionaryInvalidSessionStrategy(securityConfigProperties);
 	}
 	
 	/**
@@ -46,7 +46,7 @@ public class BrowserSecurityBeanConfig {
 	@Bean
 	@ConditionalOnMissingBean(SessionInformationExpiredStrategy.class)
 	public SessionInformationExpiredStrategy sessionInformationExpiredStrategy(){
-		return new EvolutionaryExpiredSessionStrategy(securityProperties);
+		return new EvolutionaryExpiredSessionStrategy(securityConfigProperties);
 	}
 	
 	/**
@@ -57,7 +57,7 @@ public class BrowserSecurityBeanConfig {
 	@Bean
 	@ConditionalOnMissingBean(LogoutSuccessHandler.class)
 	public LogoutSuccessHandler logoutSuccessHandler(){
-		return new EvolutionaryLogoutSuccessHandler(securityProperties.getBrower().getSignOutUrl());
+		return new EvolutionaryLogoutSuccessHandler(securityConfigProperties.getBrower().getSignOutUrl());
 	}
 	
 }

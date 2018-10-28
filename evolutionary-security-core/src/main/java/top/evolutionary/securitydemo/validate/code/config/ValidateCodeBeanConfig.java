@@ -5,7 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import top.evolutionary.securitydemo.properties.SecurityProperties;
+import top.evolutionary.securitydemo.properties.SecurityConfigProperties;
 import top.evolutionary.securitydemo.validate.code.sms.DefaultSmsCodeSender;
 import top.evolutionary.securitydemo.validate.code.image.ImageValidateCodeGenerator;
 import top.evolutionary.securitydemo.validate.code.sms.SmsCodeSender;
@@ -18,7 +18,7 @@ public class ValidateCodeBeanConfig {
     private DefaultKaptcha captchaProducer = null;
 
     @Autowired
-    private SecurityProperties securityProperties;
+    private SecurityConfigProperties securityConfigProperties;
 
     /**
      * 在初始化该bean之前看是否已经有名为imageCodeGenerator的bean了，有就不初始化了
@@ -30,7 +30,7 @@ public class ValidateCodeBeanConfig {
     public ValidateCodeGenerator imageCodeGenerator() {
         ImageValidateCodeGenerator imageValidateCodeGenerator = new ImageValidateCodeGenerator();
         imageValidateCodeGenerator.setCaptchaProducer(captchaProducer);
-        imageValidateCodeGenerator.setSecurityProperties(securityProperties);
+        imageValidateCodeGenerator.setSecurityConfigProperties(securityConfigProperties);
         return imageValidateCodeGenerator;
     }
 

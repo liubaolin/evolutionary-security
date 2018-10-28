@@ -12,7 +12,7 @@ import org.springframework.social.connect.UsersConnectionRepository;
 import org.springframework.social.connect.jdbc.JdbcUsersConnectionRepository;
 import org.springframework.social.connect.web.ProviderSignInUtils;
 import org.springframework.social.security.SpringSocialConfigurer;
-import top.evolutionary.securitydemo.properties.SecurityProperties;
+import top.evolutionary.securitydemo.properties.SecurityConfigProperties;
 
 import javax.sql.DataSource;
 
@@ -24,7 +24,7 @@ public class SocialConfig extends SocialConfigurerAdapter {
     private DataSource dataSource;
 
     @Autowired
-    private SecurityProperties securityProperties;
+    private SecurityConfigProperties securityConfigProperties;
 
     @Autowired(required = false)
     private ConnectionSignUp connectionSignUp;
@@ -43,9 +43,9 @@ public class SocialConfig extends SocialConfigurerAdapter {
 
     @Bean
     public SpringSocialConfigurer evolutionarySocialSecurityConfig() {
-        String filterProcessorUrl = securityProperties.getSocial().getFilterProcessorUrl();
+        String filterProcessorUrl = securityConfigProperties.getSocial().getFilterProcessorUrl();
         EvolutionarySpringSocialConfigurer evolutionarySpringSocialConfigurer = new EvolutionarySpringSocialConfigurer(filterProcessorUrl);
-        evolutionarySpringSocialConfigurer.signupUrl(securityProperties.getBrower().getSignUpUrl());
+        evolutionarySpringSocialConfigurer.signupUrl(securityConfigProperties.getBrower().getSignUpUrl());
         return evolutionarySpringSocialConfigurer;
     }
 

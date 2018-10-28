@@ -8,7 +8,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.web.authentication.SavedRequestAwareAuthenticationSuccessHandler;
 import org.springframework.stereotype.Component;
 import top.evolutionary.securitydemo.common.LoginInType;
-import top.evolutionary.securitydemo.properties.SecurityProperties;
+import top.evolutionary.securitydemo.properties.SecurityConfigProperties;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -27,7 +27,7 @@ public class EvolutionaryAuthenticationSuccessHandler extends SavedRequestAwareA
     private ObjectMapper objectMapper;
 
     @Autowired
-    private SecurityProperties securityProperties;
+    private SecurityConfigProperties securityConfigProperties;
 
     /**
      * 登录成功会调用该方法
@@ -42,7 +42,7 @@ public class EvolutionaryAuthenticationSuccessHandler extends SavedRequestAwareA
                                         HttpServletResponse response,
                                         Authentication authentication) throws IOException, ServletException {
         logger.info("登录成功！");
-        if (LoginInType.JSON.equals(securityProperties.getBrower().getLoginInType())) {
+        if (LoginInType.JSON.equals(securityConfigProperties.getBrower().getLoginInType())) {
             response.setContentType("application/json;charset=UTF-8");
             response.getWriter().write(objectMapper.writeValueAsString(authentication));
         }else{

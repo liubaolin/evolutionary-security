@@ -1,7 +1,7 @@
 package top.evolutionary.securitydemo.browser.session;
 
 import org.springframework.security.web.session.InvalidSessionStrategy;
-import top.evolutionary.securitydemo.properties.SecurityProperties;
+import top.evolutionary.securitydemo.properties.SecurityConfigProperties;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -14,7 +14,7 @@ import java.io.IOException;
 public class EvolutionaryInvalidSessionStrategy extends AbstractSessionStrategy implements InvalidSessionStrategy {
 
 
-    public EvolutionaryInvalidSessionStrategy(SecurityProperties securityPropertie) {
+    public EvolutionaryInvalidSessionStrategy(SecurityConfigProperties securityPropertie) {
         super(securityPropertie);
     }
 

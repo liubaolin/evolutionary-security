@@ -8,7 +8,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.social.connect.ConnectionFactory;
 import org.springframework.web.servlet.View;
-import top.evolutionary.securitydemo.properties.SecurityProperties;
+import top.evolutionary.securitydemo.properties.SecurityConfigProperties;
 import top.evolutionary.securitydemo.properties.WeChatProperties;
 import top.evolutionary.securitydemo.social.EvolutionaryConnectView;
 import top.evolutionary.securitydemo.social.wechat.connect.WeChatConnectionFactory;
@@ -21,7 +21,7 @@ import top.evolutionary.securitydemo.social.wechat.connect.WeChatConnectionFacto
 public class WeChatAutoConfig extends SocialAutoConfigurerAdapter {
 
     @Autowired
-    private SecurityProperties securityProperties;
+    private SecurityConfigProperties securityConfigProperties;
 
 
     /**
@@ -32,7 +32,7 @@ public class WeChatAutoConfig extends SocialAutoConfigurerAdapter {
      */
     @Override
     protected ConnectionFactory<?> createConnectionFactory() {
-        WeChatProperties weixinConfig = securityProperties.getSocial().getWechat();
+        WeChatProperties weixinConfig = securityConfigProperties.getSocial().getWechat();
         return new WeChatConnectionFactory(weixinConfig.getProviderId(), weixinConfig.getAppId(),
                 weixinConfig.getAppSecret());
     }

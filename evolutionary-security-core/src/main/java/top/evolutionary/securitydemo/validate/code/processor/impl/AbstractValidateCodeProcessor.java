@@ -15,6 +15,9 @@ import top.evolutionary.securitydemo.common.ValidateCodeType;
 
 import java.util.Map;
 
+/**
+ * @author richey
+ */
 public abstract class AbstractValidateCodeProcessor<C extends ValidCode> implements ValidateCodeProcessor {
 
     private SessionStrategy sessionStrategy = new HttpSessionSessionStrategy();

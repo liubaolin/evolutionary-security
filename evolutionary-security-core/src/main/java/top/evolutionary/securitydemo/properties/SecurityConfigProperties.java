@@ -2,8 +2,11 @@ package top.evolutionary.securitydemo.properties;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
+/**
+ * @author richey
+ */
 @ConfigurationProperties(prefix = "evolutionary.security")
-public class SecurityProperties {
+public class SecurityConfigProperties {
 
     private BrowerProperties brower = new BrowerProperties();
 

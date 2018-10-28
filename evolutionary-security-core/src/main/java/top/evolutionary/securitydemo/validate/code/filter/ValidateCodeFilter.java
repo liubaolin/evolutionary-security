@@ -9,7 +9,7 @@ import org.springframework.util.AntPathMatcher;
 import org.springframework.web.context.request.ServletWebRequest;
 import org.springframework.web.filter.OncePerRequestFilter;
 import top.evolutionary.securitydemo.common.SecurityConstants;
-import top.evolutionary.securitydemo.properties.SecurityProperties;
+import top.evolutionary.securitydemo.properties.SecurityConfigProperties;
 import top.evolutionary.securitydemo.validate.code.processor.ValidateCodeProcessorHolder;
 import top.evolutionary.securitydemo.common.ValidateCodeType;
 import top.evolutionary.securitydemo.validate.code.exception.ValidateCodeException;
@@ -34,7 +34,7 @@ public class ValidateCodeFilter extends OncePerRequestFilter implements Initiali
     private AuthenticationFailureHandler authenticationFailureHandler;
 
     @Autowired
-    private SecurityProperties securityProperties;
+    private SecurityConfigProperties securityConfigProperties;
 
     private AntPathMatcher pathMatcher = new AntPathMatcher();
 
@@ -55,10 +55,10 @@ public class ValidateCodeFilter extends OncePerRequestFilter implements Initiali
     public void afterPropertiesSet() throws ServletException {
         super.afterPropertiesSet();
         urlMap.put(SecurityConstants.DEFAULT_SIGN_IN_PROCESSING_URL_FORM, ValidateCodeType.IMAGE);
-        addUrlToMap(securityProperties.getCode().getImage().getUrl(), ValidateCodeType.IMAGE);
+        addUrlToMap(securityConfigProperties.getCode().getImage().getUrl(), ValidateCodeType.IMAGE);
 
         urlMap.put(SecurityConstants.DEFAULT_SIGN_IN_PROCESSING_URL_MOBILE, ValidateCodeType.SMS);
-        addUrlToMap(securityProperties.getCode().getSms().getUrl(), ValidateCodeType.SMS);
+        addUrlToMap(securityConfigProperties.getCode().getSms().getUrl(), ValidateCodeType.SMS);
 
     }
 

@@ -9,7 +9,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.social.connect.ConnectionFactory;
 import org.springframework.web.servlet.View;
 import top.evolutionary.securitydemo.properties.QQProperties;
-import top.evolutionary.securitydemo.properties.SecurityProperties;
+import top.evolutionary.securitydemo.properties.SecurityConfigProperties;
 import top.evolutionary.securitydemo.social.EvolutionaryConnectView;
 import top.evolutionary.securitydemo.social.qq.connect.QQConnectionFactory;
 
@@ -21,11 +21,11 @@ import top.evolutionary.securitydemo.social.qq.connect.QQConnectionFactory;
 public class QQAutoConfig extends SocialAutoConfigurerAdapter {
 
     @Autowired
-    private SecurityProperties securityProperties;
+    private SecurityConfigProperties securityConfigProperties;
 
     @Override
     protected ConnectionFactory<?> createConnectionFactory() {
-        QQProperties qqConfig = securityProperties.getSocial().getQq();
+        QQProperties qqConfig = securityConfigProperties.getSocial().getQq();
         return new QQConnectionFactory(qqConfig.getProviderId(), qqConfig.getAppId(), qqConfig.getAppSecret());
     }
 

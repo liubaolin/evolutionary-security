@@ -2,7 +2,7 @@ package top.evolutionary.securitydemo.validate.code.image;
 
 import com.google.code.kaptcha.impl.DefaultKaptcha;
 import org.springframework.web.context.request.ServletWebRequest;
-import top.evolutionary.securitydemo.properties.SecurityProperties;
+import top.evolutionary.securitydemo.properties.SecurityConfigProperties;
 import top.evolutionary.securitydemo.validate.code.ValidateCodeGenerator;
 
 /**
@@ -12,12 +12,12 @@ public class ImageValidateCodeGenerator implements ValidateCodeGenerator {
 
     private DefaultKaptcha captchaProducer = null;
 
-    private SecurityProperties securityProperties;
+    private SecurityConfigProperties securityConfigProperties;
 
     @Override
     public ImageCode generate(ServletWebRequest request) {
         String code = captchaProducer.createText();
-        return new ImageCode(captchaProducer.createImage(code), code, securityProperties.getCode().getImage().getExpireIn());
+        return new ImageCode(captchaProducer.createImage(code), code, securityConfigProperties.getCode().getImage().getExpireIn());
     }
 
     public DefaultKaptcha getCaptchaProducer() {
@@ -28,11 +28,11 @@ public class ImageValidateCodeGenerator implements ValidateCodeGenerator {
         this.captchaProducer = captchaProducer;
     }
 
-    public SecurityProperties getSecurityProperties() {
-        return securityProperties;
+    public SecurityConfigProperties getSecurityConfigProperties() {
+        return securityConfigProperties;
     }
 
-    public void setSecurityProperties(SecurityProperties securityProperties) {
-        this.securityProperties = securityProperties;
+    public void setSecurityConfigProperties(SecurityConfigProperties securityConfigProperties) {
+        this.securityConfigProperties = securityConfigProperties;
     }
 }

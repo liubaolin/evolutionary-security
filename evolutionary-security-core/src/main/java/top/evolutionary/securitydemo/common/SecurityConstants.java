@@ -35,6 +35,8 @@ public interface SecurityConstants {
     String DEFAULT_SIGN_IN_PAGE_URL = "/evolutionary-loginIn.html";
 
     String DEFAULT_SIGN_UP_URL = "/evolutionary-signUp.html";
+
+    String DEFAULT_SIGN_OUT_URL = "/evolutionary-signOut.html";
     /**
      * 验证图片验证码时，http请求中默认的携带图片验证码信息的参数的名称
      */

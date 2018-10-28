@@ -20,7 +20,7 @@ import org.springframework.web.context.request.ServletWebRequest;
 import top.evolutionary.securitydemo.browser.support.SimpleResult;
 import top.evolutionary.securitydemo.browser.support.SocialUserInfo;
 import top.evolutionary.securitydemo.common.SecurityConstants;
-import top.evolutionary.securitydemo.properties.SecurityProperties;
+import top.evolutionary.securitydemo.properties.SecurityConfigProperties;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -39,7 +39,7 @@ public class BrowerSecurityController {
     private RedirectStrategy redirectStrategy = new DefaultRedirectStrategy();
 
     @Autowired
-    private SecurityProperties securityProperties;
+    private SecurityConfigProperties securityConfigProperties;
 
     @Autowired
     private ProviderSignInUtils providerSignInUtils;
@@ -60,7 +60,7 @@ public class BrowerSecurityController {
             String targetUrl = savedRequest.getRedirectUrl();
             logger.info("引发跳转的请求是：" + targetUrl);
             if (StringUtils.endsWithIgnoreCase(targetUrl, ".html")) {
-                redirectStrategy.sendRedirect(request, response, securityProperties.getBrower().getLoginPage());
+                redirectStrategy.sendRedirect(request, response, securityConfigProperties.getBrower().getLoginPage());
             }
         }
         return new SimpleResult("访问的服务需要登录页面，请引导用户到登录页");

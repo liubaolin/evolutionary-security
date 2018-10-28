@@ -5,7 +5,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
 @ConfigurationProperties(prefix = "evolutionary.google.kaptcha")
-public class GoogleKapchaProperties {
+public class GoogleKapchaConfigProperties {
 
     @Value("${evolutionary.google.kaptcha.border}")
     private String border = "yes";

@@ -13,7 +13,7 @@ import org.springframework.security.web.RedirectStrategy;
 import org.springframework.security.web.util.UrlUtils;
 import org.springframework.util.Assert;
 import top.evolutionary.securitydemo.browser.support.SimpleResult;
-import top.evolutionary.securitydemo.properties.SecurityProperties;
+import top.evolutionary.securitydemo.properties.SecurityConfigProperties;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -33,7 +33,7 @@ public class AbstractSessionStrategy {
 	/**
 	 * 系统配置信息
 	 */
-	private SecurityProperties securityPropertie;
+	private SecurityConfigProperties securityPropertie;
 	/**
 	 * 重定向策略
 	 */
@@ -46,7 +46,7 @@ public class AbstractSessionStrategy {
 	private ObjectMapper objectMapper = new ObjectMapper();
 
 
-	public AbstractSessionStrategy(SecurityProperties securityPropertie) {
+	public AbstractSessionStrategy(SecurityConfigProperties securityPropertie) {
 		String invalidSessionUrl = securityPropertie.getBrower().getSession().getSessionInvalidUrl();
 		Assert.isTrue(UrlUtils.isValidRedirectUrl(invalidSessionUrl), "url must start with '/' or with 'http(s)'");
 		Assert.isTrue(StringUtils.endsWithIgnoreCase(invalidSessionUrl, ".html"), "url must end with '.html'");

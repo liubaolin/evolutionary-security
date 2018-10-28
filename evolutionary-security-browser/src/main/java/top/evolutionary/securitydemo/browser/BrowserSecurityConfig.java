@@ -7,6 +7,7 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.authentication.logout.LogoutSuccessHandler;
 import org.springframework.security.web.authentication.rememberme.JdbcTokenRepositoryImpl;
 import org.springframework.security.web.authentication.rememberme.PersistentTokenRepository;
 import org.springframework.security.web.session.InvalidSessionStrategy;
@@ -14,9 +15,8 @@ import org.springframework.security.web.session.SessionInformationExpiredStrateg
 import org.springframework.social.security.SpringSocialConfigurer;
 import top.evolutionary.securitydemo.authentication.AbstractChannelSecurityConfig;
 import top.evolutionary.securitydemo.authentication.mobile.SmsCodeAuthenticationSecurityconfig;
-import top.evolutionary.securitydemo.browser.session.EvolutionaryExpiredSessionStrategy;
 import top.evolutionary.securitydemo.common.SecurityConstants;
-import top.evolutionary.securitydemo.properties.SecurityProperties;
+import top.evolutionary.securitydemo.properties.SecurityConfigProperties;
 import top.evolutionary.securitydemo.validate.code.config.ValidateCodeSecurityConfig;
 
 import javax.sql.DataSource;
@@ -29,7 +29,7 @@ import javax.sql.DataSource;
 public class BrowserSecurityConfig extends AbstractChannelSecurityConfig {
 
     @Autowired
-    private SecurityProperties securityProperties;
+    private SecurityConfigProperties securityConfigProperties;
 
     @Autowired
     private SmsCodeAuthenticationSecurityconfig smsCodeAuthenticationSecurityconfig;
@@ -52,6 +52,9 @@ public class BrowserSecurityConfig extends AbstractChannelSecurityConfig {
 
     @Autowired
     private SessionInformationExpiredStrategy sessionInformationExpiredStrategy;
+
+    @Autowired
+    private LogoutSuccessHandler logoutSuccessHandler;
 
     @Bean
     public PasswordEncoder passwordEncoder() {
@@ -81,27 +84,34 @@ public class BrowserSecurityConfig extends AbstractChannelSecurityConfig {
                         .and()
                     .rememberMe()
                         .tokenRepository(persistentTokenRepository())
-                        .tokenValiditySeconds(securityProperties.getBrower().getRememberSeconds())
+                        .tokenValiditySeconds(securityConfigProperties.getBrower().getRememberSeconds())
                         .userDetailsService(userDetailsService)
                         .and()
                     .sessionManagement()
                         .invalidSessionStrategy(invalidSessionStrategy)
-//                        .invalidSessionUrl("/session/invalid")
-                        .maximumSessions(securityProperties.getBrower().getSession().getMaximumSessions())//最大登录数
-                        .maxSessionsPreventsLogin(securityProperties.getBrower().getSession().isMaxSessionsPreventsLogin())//当Session的数量达到最大数量后,阻止后续的登录行为
+//                        .invalidSessionUrl("/session/invalid") //Session失效后跳转的地址
+                        .maximumSessions(securityConfigProperties.getBrower().getSession().getMaximumSessions())//最大登录数
+                        .maxSessionsPreventsLogin(securityConfigProperties.getBrower().getSession().isMaxSessionsPreventsLogin())//当Session的数量达到最大数量后,阻止后续的登录行为
                         .expiredSessionStrategy(sessionInformationExpiredStrategy)
                         .and()
+                        .and()
+                    .logout()
+                        .logoutUrl("/logout")
+//                        .logoutSuccessUrl("/evolutionary-logout.html")
+                        .logoutSuccessHandler(logoutSuccessHandler)
+                        .deleteCookies("JSESSIONID")
                         .and()
                     .authorizeRequests()
                     .antMatchers(SecurityConstants.DEFAULT_UNAUTHENTICATION_URL,
                             SecurityConstants.DEFAULT_SIGN_IN_PROCESSING_URL_FORM,
                             SecurityConstants.DEFAULT_SIGN_IN_PROCESSING_URL_MOBILE,
-                            securityProperties.getBrower().getLoginPage(),
+                            securityConfigProperties.getBrower().getLoginPage(),
                             SecurityConstants.DEFAULT_VALIDATE_CODE_URL_PREFIX + "/*",
-                            securityProperties.getBrower().getSignUpUrl(),
-                            securityProperties.getBrower().getSession().getSessionInvalidUrl()+".json",
-                            securityProperties.getBrower().getSession().getSessionInvalidUrl()+".html",
-                            securityProperties.getBrower().getSession().getSessionInvalidUrl(),
+                            securityConfigProperties.getBrower().getSignUpUrl(),
+                            securityConfigProperties.getBrower().getSignOutUrl(),
+                            securityConfigProperties.getBrower().getSession().getSessionInvalidUrl()+".json",
+                            securityConfigProperties.getBrower().getSession().getSessionInvalidUrl()+".html",
+                            securityConfigProperties.getBrower().getSession().getSessionInvalidUrl(),
                             "/user/regist")
                         .permitAll()
                     .anyRequest()
